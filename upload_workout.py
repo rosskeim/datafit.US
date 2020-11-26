@@ -56,38 +56,32 @@ cnx = mysql.connector.connect(host='localhost',
 
 cursor = cnx.cursor()
 cursor.execute('SELECT * FROM exercise_db;')
-row = cursor.fetchone()
+data = cursor.fetchall()
 ex_dict = {}
-while row is not None:
-	print('inside while')
-	row = cursor.fetchone()
+for row in data:
 	ex_dict[row[1]] = row[0]
 
-print(ex_dict)
+session_data = []
 
-#cursor.close()
-#session_data = []
+with open(str(sys.argv[1])) as f:
+	reader = csv.DictReader(f) 
 
-#with open(sys.argv[0]) as f:
-	#reader = csv.reader(f) 
+	for row in reader:
+		date = row['Date']
+		name = row['Exercise']
+		weight = row['Weight']
+		reps = row['Reps']
+		notes = row['Notes']
+		exid = ex_dict.get(name)
+		if(exid is not None):
+			session_data.append([date, exid, weight, reps, notes])
 
-	#for frow in reader:
-		#print(frow)
-		#date = row[0]
-		#name = row[1]
-		#weight = row[2]
-		#reps = row[3]
-		#notes = row[4]
-		#exid = ex_dict.get(name)
-		#if(exid is not None):
-		#	session_data.append(date, exid, weight, reps, notes)
+query = 'INSERT INTO training_log(date, exid, weight, reps, notes) VALUES (%s,%s,%s,%s,%s)'
 
-#query = 'INSERT INTO training_log(date, exid, weight, reps, notes) \
-#	VALUES (%s,%s,%s,%s,%s)'
+for entry in session_data:
+	cursor.execute(query, entry)
+	cnx.commit()
 
-#cursor = cnx.cursor()
-
-#cursor.executemany(query, session_data)
-#cursor.close()
-#cnx.close()
+cursor.close()
+cnx.close()
 
