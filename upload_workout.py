@@ -58,8 +58,12 @@ cursor = cnx.cursor()
 cursor.execute('SELECT * FROM exercise_db;')
 data = cursor.fetchall()
 ex_dict = {}
+bpart_dict = {}
 for row in data:
 	ex_dict[row[1]] = row[0]
+
+for row2 in data:
+	bpart_dict[row[0]] = row[2]
 
 session_data = []
 
@@ -74,9 +78,10 @@ with open(str(sys.argv[1])) as f:
 		notes = row['Notes']
 		exid = ex_dict.get(name)
 		if(exid is not None):
-			session_data.append([date, exid, weight, reps, notes])
+			bpart = bpart_dict[exid]
+			session_data.append([date, exid, weight, reps, notes, bpart])
 
-query = 'INSERT INTO training_log(date, exid, weight, reps, notes) VALUES (%s,%s,%s,%s,%s)'
+query = 'INSERT INTO training_log(date, exid, weight, reps, notes, bpart) VALUES (%s,%s,%s,%s,%s,%s)'
 
 for entry in session_data:
 	cursor.execute(query, entry)
