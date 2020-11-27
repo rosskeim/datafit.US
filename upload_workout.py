@@ -60,10 +60,10 @@ data = cursor.fetchall()
 ex_dict = {}
 bpart_dict = {}
 for row in data:
-	ex_dict[row[1]] = row[0]
+    ex_dict[row[1]] = row[0]
+    bpart_dict[row[0]] = row[2]
 
-for row2 in data:
-	bpart_dict[row[0]] = row[2]
+print(bpart_dict)
 
 session_data = []
 
@@ -81,11 +81,12 @@ with open(str(sys.argv[1])) as f:
 			bpart = bpart_dict[exid]
 			session_data.append([date, exid, weight, reps, notes, bpart])
 
-query = 'INSERT INTO training_log(date, exid, weight, reps, notes, bpart) VALUES (%s,%s,%s,%s,%s,%s)'
+query = 'INSERT INTO training_log(date, exercise, weight, reps, notes, bpart) VALUES (%s,%s,%s,%s,%s,%s)'
 
 for entry in session_data:
-	cursor.execute(query, entry)
-	cnx.commit()
+    print(str(query) + " : " + str(entry))
+    cursor.execute(query, entry)
+    cnx.commit()
 
 cursor.close()
 cnx.close()
