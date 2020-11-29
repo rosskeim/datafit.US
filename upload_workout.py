@@ -81,10 +81,9 @@ with open(str(sys.argv[1])) as f:
 			bpart = bpart_dict[exid]
 			session_data.append([date, exid, weight, reps, notes, bpart])
 
-query = 'INSERT INTO training_log(date, exercise, weight, reps, notes, bpart) VALUES (%s,%s,%s,%s,%s,%s)'
+query = 'INSERT INTO training_log(date, exid, weight, reps, notes, bpart) VALUES (%s,%s,%s,%s,%s,%s)'
 
 for entry in session_data:
-    print(str(query) + " : " + str(entry))
     cursor.execute(query, entry)
     cnx.commit()
 
