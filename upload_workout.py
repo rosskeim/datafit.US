@@ -50,9 +50,9 @@ import csv
 import sys
 
 cnx = mysql.connector.connect(host='localhost',
-				user='root',
-				password='vCAeoLUzYvYH8Ckb',
-				database='training')
+  user='root',
+  password='vCAeoLUzYvYH8Ckb',
+  database='training')
 
 cursor = cnx.cursor()
 cursor.execute('SELECT * FROM exercise_db;')
@@ -60,8 +60,8 @@ data = cursor.fetchall()
 ex_dict = {}
 bpart_dict = {}
 for row in data:
-    ex_dict[row[1]] = row[0]
-    bpart_dict[row[0]] = row[2]
+  ex_dict[row[1]] = row[0]
+  bpart_dict[row[0]] = row[2]
 
 print(bpart_dict)
 
